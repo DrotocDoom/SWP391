@@ -1,4 +1,7 @@
-DROP DATABASE IF EXISTS OnlineShopingSystem;
+USE master;
+
+IF EXISTS (SELECT name FROM sys.databases WHERE name = N'OnlineShopingSystem')
+DROP DATABASE OnlineShopingSystem;
 
 CREATE DATABASE OnlineShopingSystem;
 
@@ -10,9 +13,7 @@ CREATE TABLE account
     [password] VARCHAR(50) NOT NULL
 );
 
-
-
-CREATE TABLE user
+CREATE TABLE [user]
 (
     [user_id] BIGINT IDENTITY(1,1) PRIMARY KEY,
     [name] VARCHAR(50) NOT NULL,
@@ -34,17 +35,39 @@ CREATE TABLE role
 CREATE TABLE category
 (
     [category_id] BIGINT IDENTITY(1,1) PRIMARY KEY,
-    [category_name] VARCHAR(50) NOT NULL
+    [category_name] VARCHAR(50) NOT NULL,
+    [is_active] BIT NOT NULL
 );
+
+
+CREATE TABLE discount
+(
+    [discount_id] BIGINT IDENTITY(1,1) PRIMARY KEY,
+    [discount_value] DECIMAL(10, 2) NOT NULL,
+    [exist_date] DATE NOT NULL,
+    [expired_date] DATE NOT NULL,
+    [is_active] BIT NOT NULL,
+    [min_price] DECIMAL(10, 2) NOT NULL,
+    [max_price] DECIMAL(10, 2) NOT NULL
+);
+
+CREATE TABLE supplier
+(
+    [supplier_id] BIGINT IDENTITY(1,1) PRIMARY KEY,
+    [company_name] VARCHAR(50) NOT NULL,
+    [company_address] VARCHAR(max) NOT NULL,
+    [phone] VARCHAR(10) NOT NULL
+);
+
 
 CREATE TABLE product
 (
     [product_id] BIGINT IDENTITY(1,1) PRIMARY KEY,
-    [provider_id] BIGINT IDENTITY(1,1) PRIMARY KEY,
+    [supplier_id] BIGINT,
     [name] VARCHAR(50) NOT NULL,
     [expiry] DATE NOT NULL,
     [mani_date] DATE NOT NULL,
-    [discount] DECIMAL(10, 2),
+    [discount_id] BIGINT,
     [price] DECIMAL(10, 2) NOT NULL,
     [quantity] INT NOT NULL,
     [is_active] BIT NOT NULL,
@@ -59,9 +82,9 @@ CREATE TABLE manager_order
     [order_date] DATE,
     [require_date] DATE,
     [ship_date] DATE,
-    [ship_address] VARCHAR(50) NOT NULL,
-    [contract_id] INT
-
+    [ship_address] VARCHAR(max) NOT NULL,
+    [contract_id] INT,
+    [total_price] DECIMAL(10, 2) NOT NULL
 )
 
 CREATE TABLE manager_order_detail
@@ -69,6 +92,28 @@ CREATE TABLE manager_order_detail
     [order_item_id] INT,
     [product_id] BIGINT,
     [manager_order_id] BIGINT,
+    [price] DECIMAL(10, 2) NOT NULL,
+    [quantity] INT NOT NULL,
+)
+
+
+CREATE TABLE customer_order
+(
+    [customer_order_id] BIGINT IDENTITY(1,1) PRIMARY KEY,
+    [seller_id] BIGINT,
+    [customer_id] INT,
+    [order_date] DATE,
+    [require_date] DATE,
+    [ship_date] DATE,
+    [ship_address] VARCHAR(max) NOT NULL,
+    [total_price] DECIMAL(10, 2) NOT NULL
+)
+
+CREATE TABLE customer_order_detail
+(   
+    [order_item_id] INT,
+    [product_id] BIGINT,
+    [customer_order_id] BIGINT,
     [price] DECIMAL(10, 2) NOT NULL,
     [quantity] INT NOT NULL,
 )
