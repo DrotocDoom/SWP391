@@ -83,7 +83,7 @@ CREATE TABLE manager_order
     [require_date] DATE,
     [ship_date] DATE,
     [ship_address] VARCHAR(max) NOT NULL,
-    [contract_id] INT,
+    [status] VARCHAR(20) NOT NULL CHECK ([status] IN ('Pending', 'Confirm', 'Cancelled')),
     [total_price] DECIMAL(10, 2) NOT NULL
 )
 
@@ -105,6 +105,7 @@ CREATE TABLE customer_order
     [order_date] DATE,
     [require_date] DATE,
     [ship_date] DATE,
+    [status] VARCHAR(20) NOT NULL CHECK ([status] IN ('Pending', 'Confirm', 'Cancelled')),
     [ship_address] VARCHAR(max) NOT NULL,
     [total_price] DECIMAL(10, 2) NOT NULL
 )
