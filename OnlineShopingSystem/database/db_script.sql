@@ -49,7 +49,7 @@ CREATE TABLE customer
     [customer_id] BIGINT IDENTITY(1, 1) PRIMARY KEY,
     [user_id] BIGINT,
     [region] VARCHAR(MAX) NOT NULL,
-    FOREIGN KEY ([user_id]) REFERENCES [user] ([user_id])
+    CONSTRAINT FK_Customer_User FOREIGN KEY ([user_id]) REFERENCES [user] ([user_id])
 );
 
 
@@ -131,13 +131,14 @@ CREATE TABLE customer_order
 (
     [customer_order_id] BIGINT IDENTITY(1, 1) PRIMARY KEY,
     [seller_id] BIGINT,
-    [customer_id] INT,
+    [customer_id] BIGINT,
     [order_date] DATETIME,
     [require_date] DATETIME,
     [ship_date] DATETIME,
     [status] VARCHAR(20) NOT NULL CHECK ([status] IN ('Pending', 'Confirm', 'Cancelled')),
     [ship_address] VARCHAR(MAX) NOT NULL,
-    [total_price] DECIMAL(10, 2) NOT NULL
+    [total_price] DECIMAL(10, 2) NOT NULL,
+    CONSTRAINT FK_CustomerOrder_Customer FOREIGN KEY ([customer_id]) REFERENCES customer ([customer_id])
 );
 
 -- Create the customer_order_detail table
