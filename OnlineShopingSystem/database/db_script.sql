@@ -1,11 +1,15 @@
 USE master;
 
-IF EXISTS (SELECT name FROM sys.databases WHERE name = N'OnlineShopingSystem')
+IF EXISTS (SELECT name FROM sys.databases WHERE name = N'OnlineShoppingSystem')
     DROP DATABASE OnlineShopingSystem;
 
-CREATE DATABASE OnlineShopingSystem;
+CREATE DATABASE OnlineShoppingSystem;
 
-USE OnlineShopingSystem;
+GO
+
+USE OnlineShoppingSystem;
+
+GO
 
 -- Create the account table
 CREATE TABLE account
@@ -13,6 +17,14 @@ CREATE TABLE account
     [account_id] BIGINT IDENTITY(1, 1) PRIMARY KEY,
     [user_name] VARCHAR(50) NOT NULL,
     [password] VARCHAR(50) NOT NULL
+);
+
+-- Create the role table
+CREATE TABLE [role]
+(
+    [role_id] INT IDENTITY(1, 1) PRIMARY KEY,
+    [role_name] VARCHAR(50) NOT NULL,
+    CONSTRAINT [role_name_unique] UNIQUE ([role_name])
 );
 
 -- Create the user table
@@ -27,15 +39,10 @@ CREATE TABLE [user]
     [account_id] BIGINT,
     [role_id] INT,
     CONSTRAINT FK_User_Account FOREIGN KEY ([account_id]) REFERENCES account ([account_id]),
-    CONSTRAINT FK_User_Role FOREIGN KEY ([role_id]) REFERENCES role ([role_id])
+    CONSTRAINT FK_User_Role FOREIGN KEY ([role_id]) REFERENCES [role] ([role_id]),
+    CONSTRAINT [gmail_unique] UNIQUE ([gmail])
 );
 
--- Create the role table
-CREATE TABLE role
-(
-    [role_id] INT IDENTITY(1, 1) PRIMARY KEY,
-    [role_name] VARCHAR(50) NOT NULL
-);
 
 -- Create the category table
 CREATE TABLE category
