@@ -44,6 +44,16 @@ CREATE TABLE [user]
 );
 
 
+CREATE TABLE customer
+(
+    [customer_id] BIGINT IDENTITY(1, 1) PRIMARY KEY,
+    [user_id] BIGINT,
+    [region] VARCHAR(MAX) NOT NULL,
+    FOREIGN KEY ([user_id]) REFERENCES [user] ([user_id])
+);
+
+
+
 -- Create the category table
 CREATE TABLE category
 (
